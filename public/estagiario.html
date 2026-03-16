@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Estagiário.ai — Plataforma Jurídica Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fafafa;
+  --surface:#ffffff;
+  --border:rgba(0,0,0,0.07);
+  --border-md:rgba(0,0,0,0.12);
+  --accent:#0066ff;
+  --accent-light:#e8f0ff;
+  --text:#0a0a0a;
+  --text-2:#3a3a3a;
+  --text-3:#6b7280;
+  --text-4:#9ca3af;
+  --sidebar:#0a0a0a;
+  --sidebar-text:#e5e7eb;
+  --sidebar-text-dim:#6b7280;
+  --sidebar-hover:rgba(255,255,255,0.06);
+  --sidebar-active:rgba(255,255,255,0.1);
+  --r-sm:10px;
+  --r-md:14px;
+  --r-lg:18px;
+  --shadow-xs:0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08),0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md:0 4px 6px rgba(0,0,0,0.06),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg:0 10px 25px rgba(0,0,0,0.08),0 4px 10px rgba(0,0,0,0.05);
+  --shadow-xl:0 20px 40px rgba(0,0,0,0.12),0 8px 20px rgba(0,0,0,0.07);
+  --font-display:"Cormorant Garamond",Georgia,serif;
+  --font-ui:"Geist",system-ui,-apple-system,sans-serif;
+  --sidebar-w:240px;
+  --high:#ef4444;
+  --med:#f59e0b;
+  --low:#22c55e;
+  --red:#ef4444;
+  --amber:#f59e0b;
+  --green:#22c55e;
+  --blue:#3b82f6;
+  --violet:#8b5cf6;
+}
+html{font-family:var(--font-ui);background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{display:flex;min-height:100vh;overflow:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--font-ui);cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:var(--font-ui)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:999px}
+
+/* SIDEBAR */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--sidebar);
+  display:flex;
+  flex-direction:column;
+  height:100vh;
+  position:fixed;
+  left:0;top:0;
+  z-index:100;
+  border-right:1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+}
+.sidebar-logo-text{
+  font-family:var(--font-display);
+  font-size:22px;
+  font-weight:600;
+  color:#ffffff;
+  letter-spacing:-.3px;
+}
+.sidebar-logo-sub{
+  font-size:11px;
+  color:var(--sidebar-text-dim);
+  margin-top:2px;
+  letter-spacing:.3px;
+  text-transform:uppercase;
+}
+.sidebar-nav{
+  flex:1;
+  padding:12px 10px;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.nav-section-label{
+  font-size:10px;
+  color:var(--sidebar-text-dim);
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  padding:8px 10px 4px;
+  margin-top:8px;
+}
+.nav-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:9px 12px;
+  border-radius:var(--r-sm);
+  color:var(--sidebar-text-dim);
+  cursor:pointer;
+  transition:all .15s;
+  font-size:13.5px;
+  font-weight:500;
+}
+.nav-item:hover{background:var(--sidebar-hover);color:var(--sidebar-text)}
+.nav-item.active{background:var(--sidebar-active);color:#ffffff}
+.nav-item svg{flex-shrink:0;opacity:.7}
+.nav-item.active svg{opacity:1}
+.sidebar-bottom{
+  padding:16px 10px;
+  border-top:1px solid rgba(255,255,255,0.06);
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.user-chip{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  transition:background .15s;
+}
+.user-chip:hover{background:var(--sidebar-hover)}
+.user-avatar{
+  width:30px;height:30px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#0066ff,#6366f1);
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;color:white;
+  flex-shrink:0;
+}
+.user-info{flex:1;min-width:0}
+.user-name{font-size:12.5px;font-weight:600;color:var(--sidebar-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-role{font-size:11px;color:var(--sidebar-text-dim)}
+
+/* MAIN */
+.main{
+  margin-left:var(--sidebar-w);
+  flex:1;
+  height:100vh;
+  overflow-y:auto;
+  display:flex;
+  flex-direction:column;
+}
+.page{display:none;flex:1;flex-direction:column;padding:32px 36px;gap:24px;animation:fadeIn .2s ease}
+.page.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.page-title{font-family:var(--font-display);font-size:28px;font-weight:600;color:var(--text);letter-spacing:-.3px}
+.page-subtitle{font-size:13px;color:var(--text-3);margin-top:3px}
+
+/* BUTTONS */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:8px 16px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:500;
+  transition:all .15s;cursor:pointer;
+  white-space:nowrap;
+}
+.btn-primary{background:var(--accent);color:white;box-shadow:0 1px 3px rgba(0,102,255,.25)}
+.btn-primary:hover{background:#0052cc;box-shadow:0 2px 6px rgba(0,102,255,.35)}
+.btn-secondary{background:var(--surface);color:var(--text-2);border:1px solid var(--border-md)}
+.btn-secondary:hover{background:#f4f4f5;border-color:rgba(0,0,0,.18)}
+.btn-ghost{color:var(--text-3);padding:7px 12px}
+.btn-ghost:hover{background:rgba(0,0,0,.05);color:var(--text)}
+.btn-danger{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.btn-danger:hover{background:#fee2e2}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-icon{padding:7px;border-radius:var(--r-sm);color:var(--text-3)}
+.btn-icon:hover{background:rgba(0,0,0,.06);color:var(--text)}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:20px;box-shadow:var(--shadow-xs)}
+.card-sm{padding:14px 16px}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.metric-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:18px 20px;
+  box-shadow:var(--shadow-xs);
+  transition:box-shadow .2s,border-color .2s;
+}
+.metric-card:hover{box-shadow:var(--shadow-md);border-color:rgba(0,0,0,.12)}
+.metric-label{font-size:12px;color:var(--text-3);font-weight:500;letter-spacing:.2px}
+.metric-value{font-family:var(--font-display);font-size:34px;font-weight:600;color:var(--text);margin:6px 0 2px;line-height:1}
+.metric-delta{font-size:12px;color:var(--text-3)}
+.metric-delta.up{color:#16a34a}
+.metric-delta.down{color:#dc2626}
+.metric-icon{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:12px;
+}
+
+/* HERO AI */
+.hero-ai{
+  background:linear-gradient(135deg,#0a0a0a 0%,#1a1a2e 50%,#0f172a 100%);
+  border-radius:var(--r-lg);
+  padding:28px 32px;
+  color:white;
+  position:relative;
+  overflow:hidden;
+  box-shadow:var(--shadow-lg);
+}
+.hero-ai::before{
+  content:"";position:absolute;top:-40px;right:-40px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(0,102,255,.25) 0%,transparent 70%);
+}
+.hero-ai::after{
+  content:"";position:absolute;bottom:-60px;left:30%;
+  width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,.1) 0%,transparent 70%);
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:999px;padding:4px 12px;font-size:11.5px;font-weight:500;
+  color:rgba(255,255,255,.8);margin-bottom:14px;
+  backdrop-filter:blur(4px);
+}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.8);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.hero-ai h2{font-family:var(--font-display);font-size:24px;font-weight:600;letter-spacing:-.2px;margin-bottom:8px;position:relative;z-index:1}
+.hero-ai p{font-size:13.5px;color:rgba(255,255,255,.65);max-width:600px;position:relative;z-index:1;line-height:1.6}
+.hero-actions{display:flex;gap:10px;margin-top:20px;position:relative;z-index:1}
+.hero-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:var(--r-sm);
+  font-size:13px;font-weight:500;font-family:var(--font-ui);
+  cursor:pointer;border:none;transition:all .15s;
+}
+.hero-btn-primary{background:#0066ff;color:white}
+.hero-btn-primary:hover{background:#0052cc}
+.hero-btn-ghost{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.12)}
+.hero-btn-ghost:hover{background:rgba(255,255,255,.14)}
+
+/* PRIORITY BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.badge-high{background:#fef2f2;color:#dc2626;border:1px solid #fecaca}
+.badge-med{background:#fffbeb;color:#d97706;border:1px solid #fde68a}
+.badge-low{background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0}
+.badge-blue{background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe}
+.badge-violet{background:#f5f3ff;color:#6d28d9;border:1px solid #ddd6fe}
+.badge-gray{background:#f9fafb;color:#4b5563;border:1px solid #e5e7eb}
+
+/* ACTIVITY LIST */
+.activity-list{display:flex;flex-direction:column;gap:2px}
+.activity-item{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:var(--r-sm);
+  transition:background .15s;cursor:pointer;
+  border:1px solid transparent;
+}
+.activity-item:hover{background:rgba(0,0,0,.025);border-color:var(--border)}
+.activity-item.done .activity-title{text-decoration:line-through;color:var(--text-4)}
+.activity-checkbox{
+  width:18px;height:18px;border-radius:5px;
+  border:2px solid var(--border-md);background:white;
+  flex-shrink:0;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;
+}
+.activity-checkbox.checked{background:var(--accent);border-color:var(--accent)}
+.activity-title{font-size:13.5px;font-weight:500;flex:1}
+.activity-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.effort-tag{font-size:11px;color:var(--text-3);background:#f4f4f5;padding:2px 7px;border-radius:999px;font-weight:500}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:16px;position:relative}
+.timeline-item::before{
+  content:"";position:absolute;left:19px;top:32px;
+  width:2px;height:calc(100% + 0px);background:var(--border);
+}
+.timeline-item:last-child::before{display:none}
+.timeline-time{font-size:12px;color:var(--text-3);width:48px;flex-shrink:0;padding-top:10px;text-align:right}
+.timeline-dot{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--accent);border:2px solid white;
+  box-shadow:0 0 0 2px var(--border-md);
+  flex-shrink:0;margin-top:13px;
+}
+.timeline-dot.red{background:var(--red)}
+.timeline-dot.green{background:var(--green)}
+.timeline-dot.amber{background:var(--amber)}
+.timeline-content{flex:1;padding:8px 0 20px}
+.timeline-title{font-size:13.5px;font-weight:500}
+.timeline-sub{font-size:12px;color:var(--text-3);margin-top:2px}
+
+/* AI LOG */
+.ai-log{display:flex;flex-direction:column;gap:10px}
+.ai-log-item{
+  background:#0a0a0a;border-radius:var(--r-sm);padding:14px 16px;
+  color:rgba(255,255,255,.85);font-size:12.5px;line-height:1.6;
+  border:1px solid rgba(255,255,255,.06);
+  position:relative;
+}
+.ai-log-time{font-size:10.5px;color:rgba(255,255,255,.35);margin-bottom:4px}
+.ai-log-text{color:rgba(255,255,255,.8)}
+
+/* KANBAN */
+.kanban-toolbar{display:flex;align-items:center;gap:10px}
+.toggle-group{display:flex;background:#f4f4f5;border-radius:var(--r-sm);padding:3px}
+.toggle-btn{
+  display:flex;align-items:center;gap:5px;
+  padding:5px 12px;border-radius:7px;font-size:12.5px;font-weight:500;
+  color:var(--text-3);cursor:pointer;border:none;background:none;
+  transition:all .15s;
+}
+.toggle-btn.active{background:white;color:var(--text);box-shadow:var(--shadow-xs)}
+.kanban-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;align-items:start}
+.kanban-col{background:#f4f4f5;border-radius:var(--r-md);padding:12px;min-height:400px}
+.kanban-col-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;padding:0 4px;
+}
+.kanban-col-title{font-size:12.5px;font-weight:600;color:var(--text-2)}
+.kanban-col-count{
+  background:rgba(0,0,0,.08);border-radius:999px;
+  padding:1px 7px;font-size:11px;font-weight:600;color:var(--text-3)
+}
+.kanban-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:14px;margin-bottom:8px;cursor:grab;
+  box-shadow:var(--shadow-xs);transition:box-shadow .15s,transform .1s;
+}
+.kanban-card:hover{box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.kanban-card.dragging{opacity:.5;cursor:grabbing}
+.kanban-card-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:8px}
+.kanban-card-meta{display:flex;flex-direction:column;gap:5px}
+.kanban-card-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--text-3)}
+.kanban-card-row svg{opacity:.6;flex-shrink:0}
+.kanban-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.kanban-add{
+  width:100%;padding:8px;border-radius:var(--r-sm);
+  font-size:12.5px;color:var(--text-3);border:1px dashed var(--border-md);
+  background:white;cursor:pointer;transition:all .15s;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  margin-top:4px;
+}
+.kanban-add:hover{background:var(--accent-light);border-color:var(--accent);color:var(--accent)}
+
+/* LIST VIEW */
+.list-view{display:none;flex-direction:column;gap:2px}
+.list-view.active{display:flex}
+.list-row{
+  display:grid;grid-template-columns:1fr 100px 100px 100px 100px 80px;
+  align-items:center;gap:12px;
+  padding:12px 16px;border-radius:var(--r-sm);
+  border:1px solid transparent;
+  transition:background .15s;
+}
+.list-row:hover{background:rgba(0,0,0,.025);border-color:var(--border)}
+.list-header{
+  font-size:11.5px;font-weight:600;color:var(--text-3);
+  text-transform:uppercase;letter-spacing:.4px;
+  padding:8px 16px;
+}
+
+/* CALENDAR */
+.calendar-grid{display:flex;flex-direction:column;gap:0}
+.cal-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.cal-month{font-family:var(--font-display);font-size:18px;font-weight:600}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid var(--border)}
+.cal-weekday{padding:10px;text-align:center;font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-day{
+  padding:8px;min-height:80px;border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);cursor:pointer;
+  transition:background .1s;
+}
+.cal-day:nth-child(7n){border-right:none}
+.cal-day:hover{background:rgba(0,102,255,.04)}
+.cal-day.other-month .cal-day-num{color:var(--text-4)}
+.cal-day.today .cal-day-num{
+  background:var(--accent);color:white;
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12.5px;font-weight:700;
+}
+.cal-day-num{font-size:12.5px;font-weight:500;color:var(--text-2);margin-bottom:4px}
+.cal-event{
+  font-size:10.5px;padding:2px 5px;border-radius:4px;margin-bottom:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;
+}
+.cal-event.red{background:#fef2f2;color:#dc2626}
+.cal-event.amber{background:#fffbeb;color:#d97706}
+.cal-event.green{background:#f0fdf4;color:#16a34a}
+.cal-event.blue{background:#eff6ff;color:#1d4ed8}
+.cal-event.violet{background:#f5f3ff;color:#6d28d9}
+
+/* AUDIENCIAS LIST */
+.audiencia-item{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 16px;border-radius:var(--r-md);
+  border:1px solid var(--border);background:white;
+  box-shadow:var(--shadow-xs);transition:box-shadow .15s;
+}
+.audiencia-item:hover{box-shadow:var(--shadow-md)}
+.audiencia-color-bar{width:4px;height:48px;border-radius:999px;flex-shrink:0}
+.audiencia-date{text-align:center;flex-shrink:0;min-width:44px}
+.audiencia-day{font-family:var(--font-display);font-size:28px;font-weight:700;line-height:1}
+.audiencia-month{font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.3px}
+.audiencia-info{flex:1}
+.audiencia-title{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.audiencia-sub{font-size:12px;color:var(--text-3)}
+
+/* CHAT */
+.chat-page{display:none;flex:1;flex-direction:column;height:100vh;overflow:hidden}
+.chat-page.active{display:flex}
+.chat-header{padding:20px 32px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:white;flex-shrink:0}
+.chat-header-title{font-family:var(--font-display);font-size:20px;font-weight:600}
+.chat-messages{flex:1;overflow-y:auto;padding:24px 32px;display:flex;flex-direction:column;gap:16px}
+.msg{display:flex;gap:10px;max-width:80%;animation:fadeIn .2s ease}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end;flex-direction:row-reverse}
+.msg-avatar{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;margin-top:2px;
+}
+.msg.ai .msg-avatar{background:#0a0a0a;color:white}
+.msg.user .msg-avatar{background:var(--accent);color:white}
+.msg-bubble{
+  padding:12px 16px;border-radius:var(--r-md);
+  font-size:13.5px;line-height:1.65;
+}
+.msg.ai .msg-bubble{background:#0a0a0a;color:rgba(255,255,255,.9);border-radius:4px var(--r-md) var(--r-md) var(--r-md)}
+.msg.user .msg-bubble{background:var(--accent);color:white;border-radius:var(--r-md) 4px var(--r-md) var(--r-md)}
+.msg-bubble strong{font-weight:600}
+.msg-bubble ul{margin:8px 0 0 16px;display:flex;flex-direction:column;gap:4px}
+.chat-input-area{
+  padding:16px 32px 24px;border-top:1px solid var(--border);
+  background:white;flex-shrink:0;
+}
+.chat-preview-chips{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.preview-chip{
+  display:flex;align-items:center;gap:6px;
+  background:#f4f4f5;border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:5px 10px;font-size:12px;color:var(--text-2);
+}
+.preview-chip-remove{
+  width:14px;height:14px;border-radius:50%;background:rgba(0,0,0,.15);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:9px;
+  color:var(--text-2);flex-shrink:0;border:none;
+}
+.chat-input-box{
+  display:flex;align-items:flex-end;gap:10px;
+  background:#f4f4f5;border-radius:var(--r-md);
+  border:1px solid var(--border-md);padding:10px 12px;
+  transition:border-color .15s;
+}
+.chat-input-box:focus-within{border-color:var(--accent);background:white;box-shadow:0 0 0 3px rgba(0,102,255,.1)}
+.chat-textarea{
+  flex:1;background:none;border:none;outline:none;
+  font-size:14px;color:var(--text);resize:none;
+  max-height:120px;font-family:var(--font-ui);
+  line-height:1.5;
+}
+.chat-textarea::placeholder{color:var(--text-4)}
+.chat-actions{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.chat-send{
+  background:var(--accent);color:white;
+  border:none;border-radius:var(--r-sm);
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:background .15s;flex-shrink:0;
+}
+.chat-send:hover{background:#0052cc}
+.chat-suggestions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.suggestion-chip{
+  padding:6px 12px;background:white;border:1px solid var(--border-md);
+  border-radius:999px;font-size:12px;color:var(--text-2);cursor:pointer;
+  transition:all .15s;
+}
+.suggestion-chip:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+
+/* ASSESSOR JURIDICO */
+.assessor-page{display:none;flex:1;flex-direction:row;height:100vh;overflow:hidden}
+.assessor-page.active{display:flex}
+.assessor-left{
+  width:340px;flex-shrink:0;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow:hidden;
+  background:white;
+}
+.assessor-right{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.assessor-left-header{
+  padding:20px;border-bottom:1px solid var(--border);
+  font-family:var(--font-display);font-size:18px;font-weight:600;flex-shrink:0;
+}
+.assessor-chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.pecas-section{padding:16px;border-top:1px solid var(--border);flex-shrink:0}
+.pecas-title{font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px}
+.pecas-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.peca-card{
+  background:#f9fafb;border:1px solid var(--border);border-radius:var(--r-sm);
+  padding:10px;cursor:pointer;transition:all .15s;
+}
+.peca-card:hover{border-color:var(--accent);background:var(--accent-light)}
+.peca-card-icon{font-size:18px;margin-bottom:4px}
+.peca-card-title{font-size:12px;font-weight:600;color:var(--text)}
+.peca-card-sub{font-size:11px;color:var(--text-3)}
+.editor-toolbar{
+  display:flex;align-items:center;gap:4px;
+  padding:10px 20px;border-bottom:1px solid var(--border);
+  background:white;flex-shrink:0;flex-wrap:wrap;
+}
+.toolbar-btn{
+  padding:5px 8px;border-radius:6px;border:1px solid transparent;
+  font-size:12px;font-weight:700;color:var(--text-2);cursor:pointer;
+  background:none;transition:all .15s;display:flex;align-items:center;
+}
+.toolbar-btn:hover{background:#f4f4f5;border-color:var(--border)}
+.toolbar-btn.active{background:var(--accent-light);border-color:rgba(0,102,255,.2);color:var(--accent)}
+.toolbar-sep{width:1px;height:20px;background:var(--border);margin:0 4px}
+.toolbar-select{
+  padding:4px 8px;border-radius:6px;border:1px solid var(--border);
+  font-size:12px;font-family:var(--font-ui);color:var(--text-2);
+  background:white;cursor:pointer;
+}
+.editor-content{flex:1;overflow-y:auto;padding:40px 60px;background:#f9fafb}
+.doc-page{
+  background:white;max-width:800px;margin:0 auto;
+  padding:60px;box-shadow:var(--shadow-md);
+  min-height:900px;font-size:13.5px;line-height:1.8;
+  border-radius:4px;
+}
+.doc-page h1{font-family:var(--font-display);font-size:22px;font-weight:700;text-align:center;margin-bottom:8px}
+.doc-page h2{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:24px 0 8px}
+.doc-page p{margin-bottom:12px}
+.doc-confirm{
+  color:var(--accent);border-bottom:1px dashed var(--accent);
+  cursor:pointer;font-weight:600;
+}
+.editor-footer{
+  padding:12px 20px;border-top:1px solid var(--border);
+  background:white;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.editor-tabs{display:flex;gap:1px;background:#f4f4f5;border-radius:var(--r-sm);padding:3px}
+.editor-tab{
+  padding:5px 14px;border-radius:7px;font-size:12.5px;font-weight:500;
+  color:var(--text-3);cursor:pointer;border:none;background:none;transition:all .15s;
+}
+.editor-tab.active{background:white;color:var(--text);box-shadow:var(--shadow-xs)}
+
+/* FILES */
+.files-layout{display:grid;grid-template-columns:220px 1fr;gap:16px;align-items:start}
+.folder-tree{background:white;border:1px solid var(--border);border-radius:var(--r-md);padding:8px}
+.folder-item{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 8px;border-radius:var(--r-sm);cursor:pointer;
+  font-size:12.5px;font-weight:500;color:var(--text-2);
+  transition:background .1s;
+}
+.folder-item:hover{background:rgba(0,0,0,.04)}
+.folder-item.active{background:var(--accent-light);color:var(--accent)}
+.folder-children{padding-left:20px;display:none}
+.folder-children.open{display:block}
+.dropzone{
+  border:2px dashed var(--border-md);border-radius:var(--r-lg);
+  padding:40px;text-align:center;cursor:pointer;
+  transition:all .2s;background:white;margin-bottom:16px;
+}
+.dropzone:hover,.dropzone.drag-over{border-color:var(--accent);background:var(--accent-light)}
+.dropzone-icon{font-size:32px;margin-bottom:8px}
+.dropzone-text{font-size:14px;font-weight:500;color:var(--text-2)}
+.dropzone-sub{font-size:12px;color:var(--text-3);margin-top:4px}
+.progress-bar-wrap{background:#f4f4f5;border-radius:999px;height:6px;overflow:hidden;margin:10px 0}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),#6366f1);border-radius:999px;transition:width .3s}
+.file-list-header{
+  display:grid;grid-template-columns:32px 1fr 100px 80px 100px 80px;
+  gap:12px;align-items:center;padding:8px 14px;
+  font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;
+}
+.file-row{
+  display:grid;grid-template-columns:32px 1fr 100px 80px 100px 80px;
+  gap:12px;align-items:center;padding:10px 14px;
+  border-radius:var(--r-sm);border:1px solid transparent;
+  transition:background .1s;cursor:pointer;
+}
+.file-row:hover{background:rgba(0,0,0,.025);border-color:var(--border)}
+.file-icon{width:32px;height:32px;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:14px}
+.file-name{font-size:13px;font-weight:500}
+.file-sub{font-size:11px;color:var(--text-3)}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:500}
+.status-badge.done{background:#f0fdf4;color:#16a34a}
+.status-badge.pending{background:#fffbeb;color:#d97706}
+.status-badge.review{background:#eff6ff;color:#1d4ed8}
+
+/* PROCURACAO */
+.flow-steps{display:flex;align-items:center;gap:0;margin-bottom:28px;overflow-x:auto;padding-bottom:4px}
+.flow-step{
+  display:flex;align-items:center;gap:0;flex-shrink:0;
+}
+.flow-step-box{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:14px 20px;background:white;border:1px solid var(--border);
+  border-radius:var(--r-sm);min-width:120px;text-align:center;
+  box-shadow:var(--shadow-xs);
+}
+.flow-step-box.active{border-color:var(--accent);background:var(--accent-light);box-shadow:0 0 0 2px rgba(0,102,255,.2)}
+.flow-step-box.done{border-color:#22c55e;background:#f0fdf4}
+.flow-step-num{
+  width:24px;height:24px;border-radius:50%;
+  background:#f4f4f5;color:var(--text-3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;
+}
+.flow-step-box.active .flow-step-num{background:var(--accent);color:white}
+.flow-step-box.done .flow-step-num{background:#22c55e;color:white}
+.flow-step-label{font-size:12px;font-weight:500;color:var(--text-2)}
+.flow-step-box.active .flow-step-label{color:var(--accent);font-weight:600}
+.flow-arrow{display:flex;align-items:center;color:var(--border-md);margin:0 -1px;z-index:1}
+.proc-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r-md);
+  padding:18px 20px;box-shadow:var(--shadow-xs);display:flex;align-items:center;gap:14px;
+  transition:box-shadow .15s;cursor:pointer;
+}
+.proc-card:hover{box-shadow:var(--shadow-md)}
+.proc-status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);
+  z-index:1000;display:none;align-items:center;justify-content:center;
+  animation:fadeIn .15s ease;
+}
+.modal-overlay.open{display:flex}
+.modal{
+  background:white;border-radius:var(--r-lg);padding:28px 32px;
+  box-shadow:var(--shadow-xl);max-width:560px;width:100%;max-height:90vh;
+  overflow-y:auto;animation:slideUp .2s ease;position:relative;
+}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.modal-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:24px;gap:12px}
+.modal-title{font-family:var(--font-display);font-size:22px;font-weight:600}
+.modal-close{
+  width:28px;height:28px;border-radius:var(--r-sm);
+  background:#f4f4f5;border:none;cursor:pointer;color:var(--text-3);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-size:16px;transition:background .15s;
+}
+.modal-close:hover{background:#e5e7eb;color:var(--text)}
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+.form-label{font-size:12.5px;font-weight:600;color:var(--text-2)}
+.form-input{
+  padding:9px 12px;border:1px solid var(--border-md);border-radius:var(--r-sm);
+  font-size:13.5px;font-family:var(--font-ui);color:var(--text);
+  background:white;outline:none;transition:border-color .15s;
+}
+.form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(0,102,255,.1)}
+.form-select{appearance:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)}
+
+/* SOBRE */
+.sobre-page{display:none;flex-direction:column;overflow-y:auto}
+.sobre-page.active{display:flex}
+.sobre-hero{
+  background:linear-gradient(135deg,#0a0a0a,#1a1a2e,#0f172a);
+  padding:80px 60px;text-align:center;color:white;
+}
+.sobre-hero h1{font-family:var(--font-display);font-size:56px;font-weight:600;letter-spacing:-1px;margin-bottom:16px}
+.sobre-hero p{font-size:16px;color:rgba(255,255,255,.6);max-width:540px;margin:0 auto 32px;line-height:1.7}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:60px}
+.feature-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:24px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s;
+}
+.feature-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-2px)}
+.feature-icon{
+  width:44px;height:44px;border-radius:var(--r-md);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:14px;
+}
+.feature-title{font-size:15px;font-weight:700;margin-bottom:6px}
+.feature-desc{font-size:13px;color:var(--text-3);line-height:1.6}
+.plans-section{padding:60px;background:#f9fafb;border-top:1px solid var(--border)}
+.plans-header{text-align:center;margin-bottom:40px}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto}
+.plan-card{
+  background:white;border:1px solid var(--border);border-radius:var(--r-lg);
+  padding:28px;box-shadow:var(--shadow-sm);
+}
+.plan-card.featured{
+  border-color:var(--accent);border-width:2px;
+  box-shadow:0 0 0 3px rgba(0,102,255,.08),var(--shadow-md);
+  position:relative;
+}
+.plan-badge{
+  position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  background:var(--accent);color:white;padding:3px 12px;border-radius:999px;
+  font-size:11.5px;font-weight:700;
+}
+.plan-name{font-size:18px;font-weight:700;margin-bottom:4px}
+.plan-price{
+  font-family:var(--font-display);font-size:40px;font-weight:700;
+  color:var(--text);margin:14px 0 4px;
+}
+.plan-price span{font-size:15px;font-weight:400;color:var(--text-3)}
+.plan-desc{font-size:12.5px;color:var(--text-3);margin-bottom:20px}
+.plan-features{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.plan-feature{display:flex;align-items:center;gap:8px;font-size:13px}
+.plan-feature-check{color:#16a34a;flex-shrink:0}
+
+/* SECTION TITLES */
+.section-title{font-family:var(--font-display);font-size:20px;font-weight:600;margin-bottom:1px}
+.section-sub{font-size:12.5px;color:var(--text-3)}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:24px;right:24px;z-index:2000;
+  background:#0a0a0a;color:white;padding:12px 20px;border-radius:var(--r-md);
+  font-size:13px;font-weight:500;box-shadow:var(--shadow-xl);
+  transform:translateY(80px);opacity:0;transition:all .3s;
+  display:flex;align-items:center;gap:8px;max-width:300px;
+}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* CHIP TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{
+  padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:500;
+  background:#f4f4f5;color:var(--text-2);border:1px solid var(--border);
+}
+
+/* UTILITY */
+.flex{display:flex}.flex-col{flex-direction:column}
+.items-center{align-items:center}.justify-between{justify-content:space-between}
+.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}
+.mt-1{margin-top:4px}.mt-2{margin-top:8px}.mt-3{margin-top:12px}.mt-4{margin-top:16px}
+.mb-2{margin-bottom:8px}.mb-3{margin-bottom:12px}.mb-4{margin-bottom:16px}
+.text-sm{font-size:12px}.text-xs{font-size:11px}
+.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}
+.text-muted{color:var(--text-3)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.w-full{width:100%}
+.truncate{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-text">Estagiário.ai</div>
+    <div class="sidebar-logo-sub">Plataforma Jurídica</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Principal</div>
+    <div class="nav-item active" onclick="navigate('hoje')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Hoje
+    </div>
+    <div class="nav-item" onclick="navigate('atividades')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      Atividades
+    </div>
+    <div class="nav-item" onclick="navigate('agenda')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Agenda & Audiências
+    </div>
+    <div class="nav-section-label">IA</div>
+    <div class="nav-item" onclick="navigate('chat')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Chat Principal
+    </div>
+    <div class="nav-item" onclick="navigate('assessor')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Assessor Jurídico
+    </div>
+    <div class="nav-section-label">Gestão</div>
+    <div class="nav-item" onclick="navigate('arquivos')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      Meus Arquivos
+    </div>
+    <div class="nav-item" onclick="navigate('procuracao')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Esteira de Procuração
+    </div>
+    <div class="nav-section-label">Sistema</div>
+    <div class="nav-item" onclick="navigate('sobre')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Sobre
+    </div>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="user-chip">
+      <div class="user-avatar">GS</div>
+      <div class="user-info">
+        <div class="user-name">Gabriel Sousa</div>
+        <div class="user-role">Estagiário de Direito</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT AREA -->
+<main class="main">
+
+<!-- PAGE: HOJE (Dashboard) -->
+<section class="page active" id="page-hoje">
+  <!-- Hero AI -->
+  <div class="hero-ai">
+    <div class="hero-badge">
+      <span class="hero-dot"></span>
+      IA Ativa — Monitorando 12 processos
+    </div>
+    <h2>Bom dia, Gabriel. Aqui está seu briefing de hoje.</h2>
+    <p>Você tem <strong>3 prazos críticos</strong> esta semana. A audiência de instrução do processo 0034211-09 (João Silva vs. Construtora Alpha) está marcada para amanhã às 14h no TJGO. A petição inicial de Anderson Vieira precisa ser protocolada até sexta-feira.</p>
+    <div class="hero-actions">
+      <button class="hero-btn hero-btn-primary" onclick="navigate('assessor')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Redigir Peça
+      </button>
+      <button class="hero-btn hero-btn-ghost" onclick="navigate('chat')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Consultar IA
+      </button>
+    </div>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#eff6ff">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <div class="metric-label">Atividades Hoje</div>
+      <div class="metric-value">8</div>
+      <div class="metric-delta up">↑ 2 novas desde ontem</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fef2f2">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <div class="metric-label">Audiências</div>
+      <div class="metric-value">2</div>
+      <div class="metric-delta">Esta semana</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#fffbeb">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+      </div>
+      <div class="metric-label">Docs Pendentes</div>
+      <div class="metric-value">5</div>
+      <div class="metric-delta down">↑ 1 urgente</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon" style="background:#f0fdf4">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="metric-label">Concluídas</div>
+      <div class="metric-value">23</div>
+      <div class="metric-delta up">↑ 4 hoje</div>
+    </div>
+  </div>
+
+  <!-- Main content: 2 columns -->
+  <div class="two-col">
+    <!-- Left: Task list -->
+    <div class="card">
+      <div class="section-header">
+        <div>
+          <div class="section-title">Atividades do Dia</div>
+          <div class="section-sub">8 tarefas · 3 concluídas</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="navigate('atividades')">Ver todas</button>
+      </div>
+      <div class="activity-list" id="activity-list">
+        <div class="activity-item" onclick="toggleActivity(this)">
+          <div class="activity-checkbox"></div>
+          <div class="activity-title">Petição Inicial — Anderson A. Vieira</div>
+          <div class="activity-meta">
+            <span class="badge badge-high">Alta</span>
+            <span class="effort-tag">3h</span>
+          </div>
+        </div>
+        <div class="activity-item done" onclick="toggleActivity(this)">
+          <div class="activity-checkbox checked">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="activity-title">Revisar contestação — Maria Santos</div>
+          <div class="activity-meta">
+            <span class="badge badge-med">Média</span>
+            <span class="effort-tag">1h</span>
+          </div>
+        </div>
+        <div class="activity-item" onclick="toggleActivity(this)">
+          <div class="activity-checkbox"></div>
+          <div class="activity-title">Preparo audiência instrução — João Silva</div>
+          <div class="activity-meta">
+            <span class="badge badge-high">Alta</span>
+            <span class="effort-tag">2h</span>
+          </div>
+        </div>
+        <div class="activity-item done" onclick="toggleActivity(this)">
+          <div class="activity-checkbox checked">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="activity-title">Protocolo TRF1 — Recurso ordinário</div>
+          <div class="activity-meta">
+            <span class="badge badge-low">Baixa</span>
+            <span class="effort-tag">30min</span>
+          </div>
+        </div>
+        <div class="activity-item" onclick="toggleActivity(this)">
+          <div class="activity-checkbox"></div>
+          <div class="activity-title">Contato cliente — Rodrigo Mendes</div>
+          <div class="activity-meta">
+            <span class="badge badge-med">Média</span>
+            <span class="effort-tag">20min</span>
+          </div>
+        </div>
+        <div class="activity-item" onclick="toggleActivity(this)">
+          <div class="activity-checkbox"></div>
+          <div class="activity-title">Análise sentença TRT 18ª — Proc. 0091234</div>
+          <div class="activity-meta">
+            <span class="badge badge-high">Alta</span>
+            <span class="effort-tag">1.5h</span>
+          </div>
+        </div>
+        <div class="activity-item done" onclick="toggleActivity(this)">
+          <div class="activity-checkbox checked">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="activity-title">Atualizar planilha prazos</div>
+          <div class="activity-meta">
+            <span class="badge badge-low">Baixa</span>
+            <span class="effort-tag">15min</span>
+          </div>
+        </div>
+        <div class="activity-item" onclick="toggleActivity(this)">
+          <div class="activity-checkbox"></div>
+          <div class="activity-title">Memorando interno — caso STJ 00142</div>
+          <div class="activity-meta">
+            <span class="badge badge-med">Média</span>
+            <span class="effort-tag">45min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Agenda + AI Log -->
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <!-- Timeline -->
+      <div class="card">
+        <div class="section-header">
+          <div>
+            <div class="section-title">Agenda de Hoje</div>
+            <div class="section-sub">Segunda-feira, 16 de março de 2026</div>
+          </div>
+        </div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-time">09:00</div>
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Reunião equipe — briefing semanal</div>
+              <div class="timeline-sub">Escritório · 30 min</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">10:30</div>
+            <div class="timeline-dot amber"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Prazo — Contestação caso Maria Santos</div>
+              <div class="timeline-sub">TRT 18ª · Proc. 0012847-33</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">14:00</div>
+            <div class="timeline-dot red"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Audiência de instrução — João Silva</div>
+              <div class="timeline-sub">TJGO · Vara Civil 3ª · Proc. 0034211-09</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">16:30</div>
+            <div class="timeline-dot green"></div>
+            <div class="timeline-content">
+              <div class="timeline-title">Reunião cliente — Anderson A. Vieira</div>
+              <div class="timeline-sub">Videoconferência · 45 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Activity Log -->
+      <div class="card">
+        <div class="section-header mb-3">
+          <div>
+            <div class="section-title">Log da IA</div>
+            <div class="section-sub">Atividades recentes do assistente</div>
+          </div>
+          <div class="hero-dot" style="margin-top:6px"></div>
+        </div>
+        <div class="ai-log">
+          <div class="ai-log-item">
+            <div class="ai-log-time">Há 4 min</div>
+            <div class="ai-log-text">Analisei a sentença do caso 0091234-55 (TRT 18ª). Identifico 2 pontos recursais relevantes sobre horas extras e adicional noturno.</div>
+          </div>
+          <div class="ai-log-item">
+            <div class="ai-log-time">Há 18 min</div>
+            <div class="ai-log-text">Procuração de Anderson A. Vieira adicionada à esteira. Aguardando validação e assinatura digital.</div>
+          </div>
+          <div class="ai-log-item">
+            <div class="ai-log-time">Há 42 min</div>
+            <div class="ai-log-text">Rascunho da petição inicial gerado com base nos fatos narrados. Campos [CONFIRMAR COM CLIENTE] marcados em 4 pontos.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: ATIVIDADES (Kanban) -->
+<section class="page" id="page-atividades">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Atividades</div>
+      <div class="page-subtitle">Gerencie suas tarefas jurídicas em tempo real</div>
+    </div>
+    <div class="flex gap-2 items-center">
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="btn-kanban" onclick="toggleView('kanban')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Kanban
+        </button>
+        <button class="toggle-btn" id="btn-lista" onclick="toggleView('lista')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          Lista
+        </button>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('modal-nova-atividade')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Nova Atividade
+      </button>
+    </div>
+  </div>
+
+  <!-- KANBAN BOARD -->
+  <div id="kanban-view">
+    <div class="kanban-board" id="kanban-board">
+      <!-- Col: Urgente/Hoje -->
+      <div class="kanban-col" data-col="urgente" ondragover="event.preventDefault()" ondrop="dropCard(event,'urgente')">
+        <div class="kanban-col-header">
+          <div class="flex items-center gap-2">
+            <div style="width:8px;height:8px;border-radius:50%;background:#ef4444"></div>
+            <span class="kanban-col-title">Urgente / Hoje</span>
+          </div>
+          <span class="kanban-col-count" id="count-urgente">2</span>
+        </div>
+        <div id="cards-urgente">
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k1">
+            <div class="kanban-card-title">Petição Inicial — Anderson A. Vieira</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Prazo: 18/03/2026
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                TJGO — Vara Civil 2ª
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-high">Alta</span>
+              <span class="effort-tag">3h estimadas</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k2">
+            <div class="kanban-card-title">Preparo Audiência — João Silva</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Audiência: 17/03/2026
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                TJGO — Proc. 0034211-09
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-high">Alta</span>
+              <span class="effort-tag">2h estimadas</span>
+            </div>
+          </div>
+        </div>
+        <button class="kanban-add" onclick="openModal('modal-nova-atividade')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+
+      <!-- Col: Em andamento -->
+      <div class="kanban-col" data-col="andamento" ondragover="event.preventDefault()" ondrop="dropCard(event,'andamento')">
+        <div class="kanban-col-header">
+          <div class="flex items-center gap-2">
+            <div style="width:8px;height:8px;border-radius:50%;background:#3b82f6"></div>
+            <span class="kanban-col-title">Em andamento</span>
+          </div>
+          <span class="kanban-col-count" id="count-andamento">3</span>
+        </div>
+        <div id="cards-andamento">
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k3">
+            <div class="kanban-card-title">Contestação — Maria Santos</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Prazo: 20/03/2026
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                TRT 18ª — Proc. 0012847-33
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-med">Média</span>
+              <span class="effort-tag">4h estimadas</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k4">
+            <div class="kanban-card-title">Recurso Ordinário — STJ 00142</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Prazo: 25/03/2026
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                STJ — Turma Especial
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-med">Média</span>
+              <span class="effort-tag">6h estimadas</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k5">
+            <div class="kanban-card-title">Análise Sentença Trabalhista</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Sem prazo definido
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                TRT 18ª — Proc. 0091234-55
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-low">Baixa</span>
+              <span class="effort-tag">1.5h estimadas</span>
+            </div>
+          </div>
+        </div>
+        <button class="kanban-add" onclick="openModal('modal-nova-atividade')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+
+      <!-- Col: Aguardando -->
+      <div class="kanban-col" data-col="aguardando" ondragover="event.preventDefault()" ondrop="dropCard(event,'aguardando')">
+        <div class="kanban-col-header">
+          <div class="flex items-center gap-2">
+            <div style="width:8px;height:8px;border-radius:50%;background:#f59e0b"></div>
+            <span class="kanban-col-title">Aguardando</span>
+          </div>
+          <span class="kanban-col-count" id="count-aguardando">2</span>
+        </div>
+        <div id="cards-aguardando">
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k6">
+            <div class="kanban-card-title">Resposta cliente — Rodrigo Mendes</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Aguardando desde: 14/03
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Informações complementares
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-low">Baixa</span>
+              <span class="effort-tag">Bloqueado</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k7">
+            <div class="kanban-card-title">TRF1 — Certidão de Objeto e Pé</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Solicitada em: 10/03
+              </div>
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                TRF1 — Seção Judiciária GO
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-med">Média</span>
+              <span class="effort-tag">Tribunal</span>
+            </div>
+          </div>
+        </div>
+        <button class="kanban-add" onclick="openModal('modal-nova-atividade')">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+
+      <!-- Col: Concluído -->
+      <div class="kanban-col" data-col="concluido" ondragover="event.preventDefault()" ondrop="dropCard(event,'concluido')">
+        <div class="kanban-col-header">
+          <div class="flex items-center gap-2">
+            <div style="width:8px;height:8px;border-radius:50%;background:#22c55e"></div>
+            <span class="kanban-col-title">Concluído</span>
+          </div>
+          <span class="kanban-col-count" id="count-concluido">3</span>
+        </div>
+        <div id="cards-concluido">
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k8" style="opacity:.65">
+            <div class="kanban-card-title" style="text-decoration:line-through">Protocolo digital TJGO — Agravo</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Concluído em: 15/03/2026
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-gray">Concluído</span>
+              <span class="effort-tag">45min</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k9" style="opacity:.65">
+            <div class="kanban-card-title" style="text-decoration:line-through">Memorando — reunião semanal</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Concluído em: 15/03/2026
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-gray">Concluído</span>
+              <span class="effort-tag">20min</span>
+            </div>
+          </div>
+          <div class="kanban-card" draggable="true" ondragstart="dragStart(event)" data-id="k10" style="opacity:.65">
+            <div class="kanban-card-title" style="text-decoration:line-through">Atualizar cadastro clientes</div>
+            <div class="kanban-card-meta">
+              <div class="kanban-card-row">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                Concluído em: 14/03/2026
+              </div>
+            </div>
+            <div class="kanban-card-footer">
+              <span class="badge badge-gray">Concluído</span>
+              <span class="effort-tag">30min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST VIEW -->
+  <div id="lista-view" class="list-view">
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="list-row list-header" style="background:#f9fafb;border-bottom:1px solid var(--border)">
+        <span></span>
+        <span>Atividade</span>
+        <span>Tribunal</span>
+        <span>Prazo</span>
+        <span>Prioridade</span>
+        <span>Esforço</span>
+      </div>
+      <div class="list-row" style="border-bottom:1px solid var(--border)">
+        <span class="badge badge-high" style="width:8px;height:8px;padding:0;border-radius:50%;background:#ef4444;border:none"></span>
+        <div><div class="file-name">Petição Inicial — Anderson A. Vieira</div><div class="file-sub">Vara Civil 2ª · TJGO</div></div>
+        <span style="font-size:13px">TJGO</span>
+        <span style="font-size:13px;color:#ef4444;font-weight:500">18/03/26</span>
+        <span><span class="badge badge-high">Alta</span></span>
+        <span class="effort-tag">3h</span>
+      </div>
+      <div class="list-row" style="border-bottom:1px solid var(--border)">
+        <span style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block"></span>
+        <div><div class="file-name">Preparo Audiência — João Silva</div><div class="file-sub">Proc. 0034211-09</div></div>
+        <span style="font-size:13px">TJGO</span>
+        <span style="font-size:13px;color:#ef4444;font-weight:500">17/03/26</span>
+        <span><span class="badge badge-high">Alta</span></span>
+        <span class="effort-tag">2h</span>
+      </div>
+      <div class="list-row" style="border-bottom:1px solid var(--border)">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block"></span>
+        <div><div class="file-name">Contestação — Maria Santos</div><div class="file-sub">Proc. 0012847-33</div></div>
+        <span style="font-size:13px">TRT 18ª</span>
+        <span style="font-size:13px">20/03/26</span>
+        <span><span class="badge badge-med">Média</span></span>
+        <span class="effort-tag">4h</span>
+      </div>
+      <div class="list-row" style="border-bottom:1px solid var(--border)">
+        <span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;display:inline-block"></span>
+        <div><div class="file-name">Recurso Ordinário — STJ 00142</div><div class="file-sub">Turma Especial</div></div>
+        <span style="font-size:13px">STJ</span>
+        <span style="font-size:13px">25/03/26</span>
+        <span><span class="badge badge-med">Média</span></span>
+        <span class="effort-tag">6h</span>
+      </div>
+      <div class="list-row">
+        <span style="width:8px;height:8px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+        <div><div class="file-name">Análise Sentença Trabalhista</div><div class="file-sub">Proc. 0091234-55</div></div>
+        <span style="font-size:13px">TRT 18ª</span>
+        <span style="font-size:13px;color:var(--text-3)">—</span>
+        <span><span class="badge badge-low">Baixa</span></span>
+        <span class="effort-tag">1.5h</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: AGENDA & AUDIÊNCIAS -->
+<section class="page" id="page-agenda">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Agenda & Audiências</div>
+      <div class="page-subtitle">Gerencie seus compromissos e prazos processuais</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-agendamento')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo Agendamento
+    </button>
+  </div>
+
+  <div class="two-col" style="grid-template-columns:1fr 360px">
+    <!-- Calendar -->
+    <div class="card" style="padding:0;overflow:hidden">
+      <div class="cal-header">
+        <button class="btn-icon" onclick="changeMonth(-1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="cal-month" id="cal-month-label">Março 2026</div>
+        <button class="btn-icon" onclick="changeMonth(1)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="cal-weekdays">
+        <div class="cal-weekday">Dom</div>
+        <div class="cal-weekday">Seg</div>
+        <div class="cal-weekday">Ter</div>
+        <div class="cal-weekday">Qua</div>
+        <div class="cal-weekday">Qui</div>
+        <div class="cal-weekday">Sex</div>
+        <div class="cal-weekday">Sáb</div>
+      </div>
+      <div class="cal-days" id="cal-days"></div>
+    </div>
+
+    <!-- Upcoming -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <!-- Legend -->
+      <div class="card card-sm">
+        <div style="font-size:12px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px">Legenda</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:#ef4444;flex-shrink:0"></div><span style="font-size:12.5px">Audiência</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:#f59e0b;flex-shrink:0"></div><span style="font-size:12.5px">Prazo processual</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:#22c55e;flex-shrink:0"></div><span style="font-size:12.5px">Reunião cliente</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:#3b82f6;flex-shrink:0"></div><span style="font-size:12.5px">Interna</span></div>
+          <div style="display:flex;align-items:center;gap:8px"><div style="width:10px;height:10px;border-radius:2px;background:#8b5cf6;flex-shrink:0"></div><span style="font-size:12.5px">Trabalhista</span></div>
+        </div>
+      </div>
+
+      <!-- Próximas audiências -->
+      <div>
+        <div class="section-header mb-3">
+          <div class="section-title" style="font-size:16px">Próximos Eventos</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="audiencia-item">
+            <div class="audiencia-color-bar" style="background:#ef4444"></div>
+            <div class="audiencia-date">
+              <div class="audiencia-day">17</div>
+              <div class="audiencia-month">Mar</div>
+            </div>
+            <div class="audiencia-info">
+              <div class="audiencia-title">Audiência de Instrução</div>
+              <div class="audiencia-sub">João Silva · TJGO 3ª Vara Civil · 14h00</div>
+            </div>
+            <span class="badge badge-high" style="flex-shrink:0">Audiência</span>
+          </div>
+          <div class="audiencia-item">
+            <div class="audiencia-color-bar" style="background:#f59e0b"></div>
+            <div class="audiencia-date">
+              <div class="audiencia-day">18</div>
+              <div class="audiencia-month">Mar</div>
+            </div>
+            <div class="audiencia-info">
+              <div class="audiencia-title">Prazo — Petição Inicial</div>
+              <div class="audiencia-sub">Anderson A. Vieira · TJGO 2ª Vara</div>
+            </div>
+            <span class="badge badge-med" style="flex-shrink:0">Prazo</span>
+          </div>
+          <div class="audiencia-item">
+            <div class="audiencia-color-bar" style="background:#22c55e"></div>
+            <div class="audiencia-date">
+              <div class="audiencia-day">19</div>
+              <div class="audiencia-month">Mar</div>
+            </div>
+            <div class="audiencia-info">
+              <div class="audiencia-title">Reunião — Anderson A. Vieira</div>
+              <div class="audiencia-sub">Videoconferência · 10h00 · 45 min</div>
+            </div>
+            <span class="badge badge-low" style="flex-shrink:0">Reunião</span>
+          </div>
+          <div class="audiencia-item">
+            <div class="audiencia-color-bar" style="background:#8b5cf6"></div>
+            <div class="audiencia-date">
+              <div class="audiencia-day">21</div>
+              <div class="audiencia-month">Mar</div>
+            </div>
+            <div class="audiencia-info">
+              <div class="audiencia-title">Audiência Trabalhista</div>
+              <div class="audiencia-sub">TRT 18ª · Proc. 0091234-55 · 09h30</div>
+            </div>
+            <span class="badge badge-violet" style="flex-shrink:0">Trabalhista</span>
+          </div>
+          <div class="audiencia-item">
+            <div class="audiencia-color-bar" style="background:#3b82f6"></div>
+            <div class="audiencia-date">
+              <div class="audiencia-day">24</div>
+              <div class="audiencia-month">Mar</div>
+            </div>
+            <div class="audiencia-info">
+              <div class="audiencia-title">Reunião interna — casos STJ</div>
+              <div class="audiencia-sub">Sala de reuniões · 15h00</div>
+            </div>
+            <span class="badge badge-blue" style="flex-shrink:0">Interna</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: CHAT PRINCIPAL -->
+<section class="chat-page" id="page-chat">
+  <div class="chat-header">
+    <div style="width:36px;height:36px;border-radius:50%;background:#0a0a0a;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+    </div>
+    <div>
+      <div class="chat-header-title">Assistente Jurídico IA</div>
+      <div style="font-size:12px;color:var(--text-3);display:flex;align-items:center;gap:5px">
+        <span style="width:6px;height:6px;border-radius:50%;background:#22c55e;display:inline-block"></span>
+        Online · Especializado em direito brasileiro
+      </div>
+    </div>
+    <div style="margin-left:auto;display:flex;gap:8px">
+      <button class="btn btn-secondary btn-sm">Nova conversa</button>
+    </div>
+  </div>
+
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg ai">
+      <div class="msg-avatar">AI</div>
+      <div>
+        <div class="msg-bubble">
+          Olá, Gabriel! Sou seu assistente jurídico com IA. Estou atualizado com o CPC, CLT, Constituição Federal e jurisprudência recente dos tribunais superiores.<br><br>
+          Como posso ajudá-lo hoje? Posso redigir peças processuais, analisar documentos, pesquisar jurisprudência ou responder dúvidas sobre procedimentos.
+        </div>
+        <div style="font-size:11px;color:var(--text-4);margin-top:4px;padding-left:4px">09:02</div>
+      </div>
+    </div>
+
+    <div class="msg user">
+      <div class="msg-avatar">G</div>
+      <div>
+        <div class="msg-bubble">
+          Preciso de ajuda com a petição inicial do processo do Anderson Vieira. Ele quer indenização por dano moral por demissão irregular.
+        </div>
+        <div style="font-size:11px;color:var(--text-4);margin-top:4px;padding-right:4px;text-align:right">09:14</div>
+      </div>
+    </div>
+
+    <div class="msg ai">
+      <div class="msg-avatar">AI</div>
+      <div>
+        <div class="msg-bubble">
+          Entendido! Para elaborar uma petição inicial sólida em ação de dano moral por demissão irregular, precisamos dos seguintes elementos:<br><br>
+          <strong>Fundamentos jurídicos aplicáveis:</strong>
+          <ul>
+            <li>Art. 186 e 187 do Código Civil (ato ilícito)</li>
+            <li>Art. 5º, X da CF/88 (inviolabilidade da honra)</li>
+            <li>Súmula 37 do STJ (cumulação de danos)</li>
+            <li>CLT Art. 482 (análise da justa causa)</li>
+          </ul>
+          <br>
+          <strong>Documentos necessários:</strong>
+          <ul>
+            <li>CTPS do trabalhador</li>
+            <li>Aviso prévio ou carta de demissão</li>
+            <li>Extratos FGTS</li>
+            <li>Testemunhas (se houver)</li>
+          </ul>
+          <br>
+          Você quer que eu gere o rascunho da peça agora? Posso acessar o editor jurídico diretamente.
+        </div>
+        <div style="font-size:11px;color:var(--text-4);margin-top:4px;padding-left:4px">09:15</div>
+      </div>
+    </div>
+
+    <div class="msg user">
+      <div class="msg-avatar">G</div>
+      <div>
+        <div class="msg-bubble">
+          Sim, pode gerar o rascunho. O valor pedido é R$ 15.000. Demissão foi em 10/02/2026 sem justa causa comunicada.
+        </div>
+        <div style="font-size:11px;color:var(--text-4);margin-top:4px;padding-right:4px;text-align:right">09:17</div>
+      </div>
+    </div>
+
+    <div class="msg ai">
+      <div class="msg-avatar">AI</div>
+      <div>
+        <div class="msg-bubble">
+          Rascunho gerado com sucesso! Marquei os campos que precisam de confirmação com o cliente em azul.<br><br>
+          <strong>Resumo da peça:</strong>
+          <ul>
+            <li>Juízo competente: <span style="color:#60a5fa">[TJGO ou TRT — confirmar vínculo]</span></li>
+            <li>Pedido principal: R$ 15.000,00 a título de dano moral</li>
+            <li>Pedido subsidiário: verbas rescisórias se não pagas</li>
+            <li>Causa de pedir: demissão sem comunicação de motivo em 10/02/2026</li>
+          </ul>
+          <br>
+          Acesse o <strong>Assessor Jurídico</strong> para revisar e editar o documento completo.
+        </div>
+        <div style="font-size:11px;color:var(--text-4);margin-top:4px;padding-left:4px">09:18</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <div class="chat-preview-chips" id="chat-chips"></div>
+    <div class="chat-input-box">
+      <textarea class="chat-textarea" id="chat-input" rows="1" placeholder="Faça uma pergunta jurídica, peça análise ou redação de peça..." onkeydown="handleChatKey(event)" oninput="autoResize(this)"></textarea>
+      <div class="chat-actions">
+        <label class="btn-icon" title="Anexar arquivo" style="cursor:pointer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+          <input type="file" style="display:none" onchange="addFileChip(this)" multiple>
+        </label>
+        <button class="chat-send" onclick="sendChatMessage()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="chat-suggestions">
+      <button class="suggestion-chip" onclick="insertSuggestion(this)">Analisar jurisprudência recente</button>
+      <button class="suggestion-chip" onclick="insertSuggestion(this)">Redigir contestação</button>
+      <button class="suggestion-chip" onclick="insertSuggestion(this)">Calcular prazo processual</button>
+      <button class="suggestion-chip" onclick="insertSuggestion(this)">Buscar precedentes STJ</button>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: ASSESSOR JURIDICO -->
+<section class="assessor-page" id="page-assessor">
+  <!-- Left Panel: Chat + Pecas -->
+  <div class="assessor-left">
+    <div class="assessor-left-header">
+      Assessor Jurídico
+      <div style="font-size:12px;color:var(--text-3);font-family:var(--font-ui);font-weight:400;margin-top:2px">Redação inteligente de peças</div>
+    </div>
+    <div class="assessor-chat" id="assessor-chat">
+      <div class="msg ai" style="max-width:100%">
+        <div class="msg-avatar" style="background:#0a0a0a;color:white;width:28px;height:28px;font-size:10px;margin-top:2px;flex-shrink:0">AI</div>
+        <div class="msg-bubble" style="background:#0a0a0a;color:rgba(255,255,255,.85);border-radius:4px 12px 12px 12px;font-size:12.5px;padding:10px 12px">
+          Olá! Selecione um tipo de peça abaixo ou descreva o documento que precisa redigir.
+        </div>
+      </div>
+    </div>
+    <div style="padding:12px;border-top:1px solid var(--border);flex-shrink:0">
+      <div class="chat-input-box" style="background:#f9fafb">
+        <textarea class="chat-textarea" id="assessor-input" rows="1" placeholder="Descreva a peça ou forneça fatos..." onkeydown="handleAssessorKey(event)" oninput="autoResize(this)" style="font-size:13px"></textarea>
+        <button class="chat-send" onclick="sendAssessorMessage()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="pecas-section">
+      <div class="pecas-title">Peças Recentes</div>
+      <div class="pecas-grid">
+        <div class="peca-card" onclick="loadPeca('peticao')">
+          <div class="peca-card-icon">📄</div>
+          <div class="peca-card-title">Petição Inicial</div>
+          <div class="peca-card-sub">Anderson Vieira</div>
+        </div>
+        <div class="peca-card" onclick="loadPeca('contestacao')">
+          <div class="peca-card-icon">⚖️</div>
+          <div class="peca-card-title">Contestação</div>
+          <div class="peca-card-sub">Maria Santos</div>
+        </div>
+        <div class="peca-card" onclick="loadPeca('recurso')">
+          <div class="peca-card-icon">📋</div>
+          <div class="peca-card-title">Recurso Ord.</div>
+          <div class="peca-card-sub">STJ 00142</div>
+        </div>
+        <div class="peca-card" onclick="loadPeca('memorando')">
+          <div class="peca-card-icon">📝</div>
+          <div class="peca-card-title">Memorando</div>
+          <div class="peca-card-sub">Interno</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right Panel: Editor -->
+  <div class="assessor-right">
+    <div class="editor-toolbar">
+      <div class="editor-tabs">
+        <button class="editor-tab active" id="tab-editor" onclick="switchEditorTab('editor')">Editor</button>
+        <button class="editor-tab" id="tab-revisao" onclick="switchEditorTab('revisao')">Revisão IA</button>
+        <button class="editor-tab" id="tab-historico" onclick="switchEditorTab('historico')">Histórico</button>
+      </div>
+      <div class="toolbar-sep"></div>
+      <select class="toolbar-select" onchange="changeFontSize(this.value)">
+        <option>12pt</option><option selected>13pt</option><option>14pt</option><option>16pt</option>
+      </select>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn active" id="tb-bold" onclick="toggleToolbar('tb-bold','bold')"><strong>N</strong></button>
+      <button class="toolbar-btn" id="tb-italic" onclick="toggleToolbar('tb-italic','italic')"><em>I</em></button>
+      <button class="toolbar-btn" id="tb-under" onclick="toggleToolbar('tb-under','underline')"><u>S</u></button>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" title="Alinhar esquerda" onclick="execCmd('justifyLeft')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+      </button>
+      <button class="toolbar-btn" title="Centralizar" onclick="execCmd('justifyCenter')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+      </button>
+      <button class="toolbar-btn" title="Justificar" onclick="execCmd('justifyFull')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="3" y2="18"/></svg>
+      </button>
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" title="Lista" onclick="execCmd('insertUnorderedList')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+      </button>
+      <button class="toolbar-btn" title="Lista numerada" onclick="execCmd('insertOrderedList')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+      </button>
+    </div>
+
+    <div class="editor-content" id="editor-content">
+      <div class="doc-page" id="doc-editor" contenteditable="true">
+        <h1>EXCELENTÍSSIMO(A) SENHOR(A) DOUTOR(A) JUIZ(A) DE DIREITO DA <span class="doc-confirm" onclick="confirmField(this)">[CONFIRMAR VARA - TJGO OU TRT]</span> VARA</h1>
+        <p style="text-align:center;margin:8px 0 32px;color:var(--text-3);font-size:12px">da Comarca de Goiânia, Estado de Goiás</p>
+
+        <p><strong>ANDERSON ANTONIO VIEIRA</strong>, brasileiro, solteiro, <span class="doc-confirm" onclick="confirmField(this)">[CONFIRMAR PROFISSÃO]</span>, portador do RG nº <span class="doc-confirm" onclick="confirmField(this)">[RG DO CLIENTE]</span> e CPF nº <span class="doc-confirm" onclick="confirmField(this)">[CPF DO CLIENTE]</span>, residente e domiciliado na <span class="doc-confirm" onclick="confirmField(this)">[ENDEREÇO COMPLETO]</span>, por intermédio de seu advogado que esta subscreve (OAB/<span class="doc-confirm" onclick="confirmField(this)">[ESTADO]</span> nº <span class="doc-confirm" onclick="confirmField(this)">[Nº OAB]</span>), com escritório profissional à <span class="doc-confirm" onclick="confirmField(this)">[ENDEREÇO ESCRITÓRIO]</span>, onde receberá intimações, vem, respeitosamente, à presença de Vossa Excelência propor a presente:</p>
+
+        <h1 style="margin:24px 0 16px">AÇÃO DE INDENIZAÇÃO POR DANOS MORAIS</h1>
+
+        <p>em face de <span class="doc-confirm" onclick="confirmField(this)">[RAZÃO SOCIAL DA EMPRESA RÉ]</span>, pessoa jurídica de direito privado, inscrita no CNPJ nº <span class="doc-confirm" onclick="confirmField(this)">[CNPJ DA EMPRESA]</span>, com sede na <span class="doc-confirm" onclick="confirmField(this)">[ENDEREÇO DA EMPRESA]</span>, pelos fatos e fundamentos a seguir expostos:</p>
+
+        <h2>I — DOS FATOS</h2>
+        <p>O Requerente prestou serviços à Requerida no período de <span class="doc-confirm" onclick="confirmField(this)">[DATA ADMISSÃO]</span> a 10 de fevereiro de 2026, tendo sido demitido sem que lhe fosse comunicado qualquer motivo para a rescisão contratual, tampouco fosse apontada a prática de qualquer falta grave que pudesse ensejar a demissão por justa causa.</p>
+
+        <p>A demissão ocorreu de forma abrupta, sem observância dos procedimentos legais, causando ao Requerente significativo abalo emocional, constrangimento perante seus pares e prejuízos à sua imagem profissional.</p>
+
+        <h2>II — DO DIREITO</h2>
+        <p>O art. 186 do Código Civil estabelece que aquele que, por ação ou omissão voluntária, negligência ou imprudência, violar direito e causar dano a outrem, ainda que exclusivamente moral, comete ato ilícito.</p>
+
+        <p>O art. 5º, inciso X, da Constituição Federal assegura a inviolabilidade da intimidade, da vida privada, da honra e da imagem das pessoas, garantindo o direito à indenização pelo dano moral decorrente de sua violação.</p>
+
+        <h2>III — DO PEDIDO</h2>
+        <p>Diante do exposto, requer a Vossa Excelência:</p>
+        <p>a) A procedência total da ação, com a condenação da Requerida ao pagamento de <strong>R$ 15.000,00</strong> (quinze mil reais) a título de indenização por danos morais;</p>
+        <p>b) Caso não reconhecido o dano moral, subsidiariamente, o pagamento das verbas rescisórias devidas;</p>
+        <p>c) A condenação da Requerida ao pagamento das custas processuais e honorários advocatícios, nos termos do art. 85 do CPC.</p>
+
+        <p>Dá-se à causa o valor de <strong>R$ 15.000,00</strong> (quinze mil reais).</p>
+
+        <p style="text-align:right;margin-top:32px">Goiânia, 16 de março de 2026.</p>
+        <p style="text-align:right;margin-top:40px"><strong>___________________________________</strong><br><span class="doc-confirm" onclick="confirmField(this)">[NOME DO ADVOGADO]</span><br>OAB/<span class="doc-confirm" onclick="confirmField(this)">[ESTADO]</span> nº <span class="doc-confirm" onclick="confirmField(this)">[Nº OAB]</span></p>
+      </div>
+    </div>
+
+    <div class="editor-footer">
+      <div style="font-size:12px;color:var(--text-3)">
+        <span id="field-count" style="color:var(--accent);font-weight:600">9 campos</span> para confirmar com cliente
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-secondary btn-sm" onclick="showToast('Documento salvo automaticamente')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Salvar
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="downloadDoc()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar .docx
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: MEUS ARQUIVOS -->
+<section class="page" id="page-arquivos">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Meus Arquivos</div>
+      <div class="page-subtitle">Gerencie documentos e arquivos processuais</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-secondary" onclick="selectAllFiles()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 11 12 14 22 4"/></svg>
+        Selecionar todos
+      </button>
+      <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Upload
+        <input type="file" id="file-input" style="display:none" onchange="handleFileUpload(this)" multiple>
+      </button>
+    </div>
+  </div>
+
+  <div class="files-layout">
+    <!-- Folder tree -->
+    <div class="folder-tree">
+      <div class="folder-item active" onclick="selectFolder(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Todos os arquivos
+      </div>
+      <div class="folder-item" onclick="toggleFolder(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:rotate(0deg);transition:.15s" class="fold-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Processos Ativos
+      </div>
+      <div class="folder-children" id="fc-processos">
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          João Silva
+        </div>
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Anderson Vieira
+        </div>
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Maria Santos
+        </div>
+      </div>
+      <div class="folder-item" onclick="toggleFolder(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="fold-arrow"><polyline points="9 18 15 12 9 6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Petições
+      </div>
+      <div class="folder-children" id="fc-peticoes">
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Iniciais
+        </div>
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Contestações
+        </div>
+        <div class="folder-item" style="font-size:12px" onclick="selectFolder(this)">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Recursos
+        </div>
+      </div>
+      <div class="folder-item" onclick="selectFolder(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Procurações
+      </div>
+      <div class="folder-item" onclick="selectFolder(this)">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        Documentos pessoais
+      </div>
+    </div>
+
+    <!-- File content -->
+    <div>
+      <!-- Dropzone -->
+      <div class="dropzone" id="dropzone" ondragover="dragOverDropzone(event)" ondragleave="dragLeaveDropzone()" ondrop="handleDropFiles(event)" onclick="document.getElementById('file-input').click()">
+        <div class="dropzone-icon">☁️</div>
+        <div class="dropzone-text">Arraste arquivos aqui ou clique para selecionar</div>
+        <div class="dropzone-sub">PDF, DOCX, JPG, PNG — até 50MB por arquivo</div>
+      </div>
+
+      <!-- Upload progress -->
+      <div id="upload-progress-wrap" style="display:none;margin-bottom:16px" class="card card-sm">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span id="upload-filename" style="font-size:13px;font-weight:500"></span>
+          <span id="upload-pct" style="font-size:12px;color:var(--text-3)">0%</span>
+        </div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="progress-bar" style="width:0%"></div></div>
+      </div>
+
+      <!-- File list -->
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="file-list-header" style="background:#f9fafb;border-bottom:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px">
+          <span></span>
+          <span>Nome</span>
+          <span>Tipo</span>
+          <span>Tamanho</span>
+          <span>Status</span>
+          <span>Ações</span>
+        </div>
+        <div id="file-list">
+          <div class="file-row" style="border-bottom:1px solid var(--border)">
+            <div class="file-icon" style="background:#fef2f2">📄</div>
+            <div><div class="file-name">Petição_Inicial_Anderson_Vieira.docx</div><div class="file-sub">Modificado: hoje às 09:18</div></div>
+            <span style="font-size:12.5px;color:var(--text-3)">DOCX</span>
+            <span style="font-size:12.5px;color:var(--text-3)">24 KB</span>
+            <span class="status-badge pending">Rascunho</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon btn-sm" title="Baixar" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+              <button class="btn-icon btn-sm" title="Excluir" onclick="showToast('Arquivo excluído')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+            </div>
+          </div>
+          <div class="file-row" style="border-bottom:1px solid var(--border)">
+            <div class="file-icon" style="background:#eff6ff">📋</div>
+            <div><div class="file-name">Contestação_Maria_Santos_TRT18.docx</div><div class="file-sub">Modificado: 15/03 às 16:42</div></div>
+            <span style="font-size:12.5px;color:var(--text-3)">DOCX</span>
+            <span style="font-size:12.5px;color:var(--text-3)">31 KB</span>
+            <span class="status-badge review">Em revisão</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon btn-sm" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+              <button class="btn-icon btn-sm" onclick="showToast('Arquivo excluído')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+            </div>
+          </div>
+          <div class="file-row" style="border-bottom:1px solid var(--border)">
+            <div class="file-icon" style="background:#f0fdf4">📁</div>
+            <div><div class="file-name">Procuração_Joao_Silva_0034211.pdf</div><div class="file-sub">Modificado: 12/03 às 10:15</div></div>
+            <span style="font-size:12.5px;color:var(--text-3)">PDF</span>
+            <span style="font-size:12.5px;color:var(--text-3)">186 KB</span>
+            <span class="status-badge done">Protocolado</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon btn-sm" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+              <button class="btn-icon btn-sm" onclick="showToast('Arquivo excluído')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+            </div>
+          </div>
+          <div class="file-row" style="border-bottom:1px solid var(--border)">
+            <div class="file-icon" style="background:#fef9c3">🖼️</div>
+            <div><div class="file-name">CTPS_Anderson_Vieira_frente.jpg</div><div class="file-sub">Modificado: 14/03 às 14:30</div></div>
+            <span style="font-size:12.5px;color:var(--text-3)">JPG</span>
+            <span style="font-size:12.5px;color:var(--text-3)">2.4 MB</span>
+            <span class="status-badge done">Anexado</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon btn-sm" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+              <button class="btn-icon btn-sm" onclick="showToast('Arquivo excluído')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background:#fdf2f8">📊</div>
+            <div><div class="file-name">Sentença_TRT18_0091234-55.pdf</div><div class="file-sub">Modificado: 15/03 às 08:00</div></div>
+            <span style="font-size:12.5px;color:var(--text-3)">PDF</span>
+            <span style="font-size:12.5px;color:var(--text-3)">412 KB</span>
+            <span class="status-badge review">Analisando</span>
+            <div style="display:flex;gap:4px">
+              <button class="btn-icon btn-sm" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+              <button class="btn-icon btn-sm" onclick="showToast('Arquivo excluído')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: ESTEIRA DE PROCURAÇÃO -->
+<section class="page" id="page-procuracao">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Esteira de Procuração</div>
+      <div class="page-subtitle">Acompanhe o ciclo completo de procurações</div>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-nova-proc')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Nova Procuração
+    </button>
+  </div>
+
+  <!-- Flow steps -->
+  <div class="card" style="padding:20px 24px">
+    <div style="font-size:13px;font-weight:600;color:var(--text-2);margin-bottom:16px">Fluxo de Aprovação</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-box done">
+          <div class="flow-step-num">✓</div>
+          <div class="flow-step-label">Dados cliente</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-box done">
+          <div class="flow-step-num">✓</div>
+          <div class="flow-step-label">Geração doc.</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-box active">
+          <div class="flow-step-num">3</div>
+          <div class="flow-step-label">Assinatura</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-box">
+          <div class="flow-step-num">4</div>
+          <div class="flow-step-label">Reconhecimento</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-box">
+          <div class="flow-step-num">5</div>
+          <div class="flow-step-label">Digitalização</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="flow-step">
+        <div class="flow-step-box">
+          <div class="flow-step-num">6</div>
+          <div class="flow-step-label">Arquivado</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Procurações em aberto -->
+  <div>
+    <div class="section-header mb-3">
+      <div class="section-title">Procurações em Aberto</div>
+      <div style="font-size:12px;color:var(--text-3)">3 aguardando ação</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="proc-card">
+        <div class="proc-status-dot" style="background:#3b82f6"></div>
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:600">Anderson A. Vieira</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">Proc. 0034822-12 · TJGO · Iniciada em 14/03/2026</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="badge badge-blue">Aguardando assinatura</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">Etapa 3 de 6</div>
+        </div>
+        <button class="btn btn-secondary btn-sm">Avançar</button>
+      </div>
+      <div class="proc-card">
+        <div class="proc-status-dot" style="background:#f59e0b"></div>
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:600">Rodrigo Almeida Mendes</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">TRT 18ª · Iniciada em 10/03/2026</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="badge badge-med">Reconhecimento pendente</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">Etapa 4 de 6</div>
+        </div>
+        <button class="btn btn-secondary btn-sm">Avançar</button>
+      </div>
+      <div class="proc-card">
+        <div class="proc-status-dot" style="background:#8b5cf6"></div>
+        <div style="flex:1">
+          <div style="font-size:13.5px;font-weight:600">Família Nascimento (3 membros)</div>
+          <div style="font-size:12px;color:var(--text-3);margin-top:2px">STJ · Inventário · Iniciada em 08/03/2026</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0">
+          <div class="badge badge-violet">Digitalização</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">Etapa 5 de 6</div>
+        </div>
+        <button class="btn btn-secondary btn-sm">Avançar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Concluídas recentes -->
+  <div>
+    <div class="section-header mb-3">
+      <div class="section-title">Concluídas Recentemente</div>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="display:grid;grid-template-columns:1fr 120px 120px 80px;gap:12px;padding:10px 16px;background:#f9fafb;border-bottom:1px solid var(--border);font-size:11.5px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.4px">
+        <span>Cliente</span><span>Tribunal</span><span>Concluída em</span><span></span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 120px 120px 80px;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)">
+        <div><div class="file-name">João Silva</div><div class="file-sub">Proc. 0034211-09</div></div>
+        <span style="font-size:13px">TJGO</span>
+        <span style="font-size:13px">12/03/2026</span>
+        <span class="status-badge done">OK</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 120px 120px 80px;gap:12px;align-items:center;padding:12px 16px">
+        <div><div class="file-name">Maria Santos</div><div class="file-sub">Proc. 0012847-33</div></div>
+        <span style="font-size:13px">TRT 18ª</span>
+        <span style="font-size:13px">08/03/2026</span>
+        <span class="status-badge done">OK</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAGE: SOBRE -->
+<section class="sobre-page" id="page-sobre">
+  <div class="sobre-hero">
+    <div class="hero-badge" style="margin:0 auto 20px;display:inline-flex">
+      <span class="hero-dot"></span>
+      Versão 2.1 — Março 2026
+    </div>
+    <h1>Estagiário<span style="color:#0066ff">.ai</span></h1>
+    <p>A plataforma de gestão jurídica com inteligência artificial mais completa para escritórios de advocacia brasileiros. Do briefing matinal ao protocolo final.</p>
+    <div style="display:flex;gap:12px;justify-content:center">
+      <button class="hero-btn hero-btn-primary" onclick="navigate('hoje')">Começar agora</button>
+      <button class="hero-btn hero-btn-ghost" onclick="navigate('chat')">Ver demonstração</button>
+    </div>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#eff6ff">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z"/></svg>
+      </div>
+      <div class="feature-title">Assessor Jurídico IA</div>
+      <div class="feature-desc">Redação inteligente de petições, contestações, recursos e memorandos com base nos fatos narrados pelo cliente.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fef2f2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/></svg>
+      </div>
+      <div class="feature-title">Gestão de Prazos</div>
+      <div class="feature-desc">Calendário processual automático com alertas inteligentes. Nunca perca um prazo com monitoramento em tempo real.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#f0fdf4">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      </div>
+      <div class="feature-title">Kanban Jurídico</div>
+      <div class="feature-desc">Organize suas atividades em quadro visual por status, prioridade e esforço estimado. Controle total do fluxo de trabalho.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#f5f3ff">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="feature-title">Esteira de Procuração</div>
+      <div class="feature-desc">Fluxo completo de gestão de procurações: da coleta de dados à assinatura digital e arquivamento seguro.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fff7ed">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="feature-title">Gestão de Arquivos</div>
+      <div class="feature-desc">Armazenamento organizado por cliente e processo. Upload com drag & drop, classificação automática por tipo de documento.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fffbeb">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feature-title">Briefing Diário IA</div>
+      <div class="feature-desc">Resumo matinal personalizado com prioridades do dia, audiências próximas e alertas de prazo gerados por IA.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#ecfdf5">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="feature-title">Chat Jurídico</div>
+      <div class="feature-desc">Assistente de IA especializado em direito brasileiro. Pesquisa de jurisprudência, cálculo de prazos e análise processual.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#fdf2f8">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="feature-title">Gestão de Clientes</div>
+      <div class="feature-desc">Cadastro completo de clientes com histórico processual, documentos e timeline de comunicações.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon" style="background:#f0f9ff">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0ea5e9" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="feature-title">Integração Tribunais</div>
+      <div class="feature-desc">Consulta automática de andamentos processuais no TJGO, TRT 18ª, STJ e TRF1. Notificações em tempo real.</div>
+    </div>
+  </div>
+
+  <!-- Plans -->
+  <div class="plans-section">
+    <div class="plans-header">
+      <div style="font-family:var(--font-display);font-size:36px;font-weight:600;letter-spacing:-.3px;margin-bottom:8px">Planos & Preços</div>
+      <div style="font-size:14px;color:var(--text-3)">Escolha o plano ideal para seu escritório</div>
+    </div>
+    <div class="plans-grid">
+      <div class="plan-card">
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">R$97<span>/mês</span></div>
+        <div class="plan-desc">Para estagiários e advogados autônomos</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Até 10 processos ativos</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Chat IA ilimitado</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> 5GB de armazenamento</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Calendário & prazos</div>
+          <div class="plan-feature" style="color:var(--text-4)"><span style="color:var(--text-4)">✗</span> Assessor Jurídico IA</div>
+          <div class="plan-feature" style="color:var(--text-4)"><span style="color:var(--text-4)">✗</span> Integração tribunais</div>
+        </div>
+        <button class="btn btn-secondary w-full" style="justify-content:center">Começar grátis</button>
+      </div>
+      <div class="plan-card featured">
+        <div class="plan-badge">Mais popular</div>
+        <div class="plan-name">Profissional</div>
+        <div class="plan-price" style="color:var(--accent)">R$297<span>/mês</span></div>
+        <div class="plan-desc">Para escritórios em crescimento</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Processos ilimitados</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Chat IA ilimitado</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> 50GB de armazenamento</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Assessor Jurídico IA</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Esteira de procuração</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Integração 4 tribunais</div>
+        </div>
+        <button class="btn btn-primary w-full" style="justify-content:center">Assinar agora</button>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price">R$897<span>/mês</span></div>
+        <div class="plan-desc">Para grandes escritórios</div>
+        <div class="plan-features">
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Tudo do Profissional</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Até 20 usuários</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> 500GB de armazenamento</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> API personalizada</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Todos os tribunais</div>
+          <div class="plan-feature"><span class="plan-feature-check">✓</span> Suporte prioritário 24h</div>
+        </div>
+        <button class="btn btn-secondary w-full" style="justify-content:center">Falar com vendas</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main><!-- end main -->
+
+<!-- MODALS -->
+
+<!-- Modal Nova Atividade -->
+<div class="modal-overlay" id="modal-nova-atividade">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nova Atividade</div>
+      <button class="modal-close" onclick="closeModal('modal-nova-atividade')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Título da atividade</label>
+      <input class="form-input" type="text" placeholder="Ex: Petição inicial — cliente X">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Cliente</label>
+        <select class="form-input form-select">
+          <option>Selecionar cliente...</option>
+          <option>João Silva</option>
+          <option>Anderson A. Vieira</option>
+          <option>Maria Santos</option>
+          <option>Rodrigo Mendes</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tribunal</label>
+        <select class="form-input form-select">
+          <option>Selecionar tribunal...</option>
+          <option>TJGO</option>
+          <option>TRT 18ª</option>
+          <option>STJ</option>
+          <option>TRF1</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Prioridade</label>
+        <select class="form-input form-select">
+          <option>Alta</option>
+          <option>Média</option>
+          <option>Baixa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Esforço estimado</label>
+        <select class="form-input form-select">
+          <option>15 min</option>
+          <option>30 min</option>
+          <option>1 hora</option>
+          <option>2 horas</option>
+          <option>3 horas</option>
+          <option>4+ horas</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Prazo</label>
+        <input class="form-input" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Coluna inicial</label>
+        <select class="form-input form-select">
+          <option>Urgente / Hoje</option>
+          <option>Em andamento</option>
+          <option>Aguardando</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Observações</label>
+      <textarea class="form-input" rows="3" placeholder="Detalhes adicionais..." style="resize:vertical"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-nova-atividade')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveActivity()">Criar atividade</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Agendamento -->
+<div class="modal-overlay" id="modal-agendamento">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Novo Agendamento</div>
+      <button class="modal-close" onclick="closeModal('modal-agendamento')">×</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Título do evento</label>
+      <input class="form-input" type="text" placeholder="Ex: Audiência de instrução — caso X">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tipo</label>
+        <select class="form-input form-select">
+          <option>Audiência</option>
+          <option>Prazo processual</option>
+          <option>Reunião cliente</option>
+          <option>Interna</option>
+          <option>Trabalhista</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Data</label>
+        <input class="form-input" type="date">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Horário</label>
+        <input class="form-input" type="time">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Duração</label>
+        <select class="form-input form-select">
+          <option>15 min</option>
+          <option>30 min</option>
+          <option>45 min</option>
+          <option>1 hora</option>
+          <option>2 horas</option>
+          <option>Dia inteiro</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Processo / Referência</label>
+      <input class="form-input" type="text" placeholder="Nº do processo ou referência">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Tribunal / Local</label>
+      <input class="form-input" type="text" placeholder="Ex: TJGO — 3ª Vara Civil">
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-agendamento')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveEvent()">Criar evento</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Nova Procuração -->
+<div class="modal-overlay" id="modal-nova-proc">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Nova Procuração</div>
+      <button class="modal-close" onclick="closeModal('modal-nova-proc')">×</button>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Nome do outorgante</label>
+        <input class="form-input" type="text" placeholder="Nome completo do cliente">
+      </div>
+      <div class="form-group">
+        <label class="form-label">CPF</label>
+        <input class="form-input" type="text" placeholder="000.000.000-00">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Tipo de processo</label>
+        <select class="form-input form-select">
+          <option>Civil</option>
+          <option>Trabalhista</option>
+          <option>Criminal</option>
+          <option>Tributário</option>
+          <option>Administrativo</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tribunal</label>
+        <select class="form-input form-select">
+          <option>TJGO</option>
+          <option>TRT 18ª</option>
+          <option>STJ</option>
+          <option>TRF1</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Poderes outorgados</label>
+      <textarea class="form-input" rows="3" placeholder="Descreva os poderes específicos ou selecione abaixo..." style="resize:vertical"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+      <button class="tag" onclick="this.classList.toggle('active');this.style.background=this.classList.contains('active')?'var(--accent-light)':''">Ad judicia</button>
+      <button class="tag" onclick="this.classList.toggle('active');this.style.background=this.classList.contains('active')?'var(--accent-light)':''">Receber citação</button>
+      <button class="tag" onclick="this.classList.toggle('active');this.style.background=this.classList.contains('active')?'var(--accent-light)':''">Substabelecer</button>
+      <button class="tag" onclick="this.classList.toggle('active');this.style.background=this.classList.contains('active')?'var(--accent-light)':''">Transigir</button>
+      <button class="tag" onclick="this.classList.toggle('active');this.style.background=this.classList.contains('active')?'var(--accent-light)':''">Recorrer</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('modal-nova-proc')">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveProc()">Iniciar esteira</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// NAVIGATION
+// ============================================================
+function navigate(page) {
+  // Hide all pages
+  document.querySelectorAll('.page, .chat-page, .assessor-page, .sobre-page').forEach(el => {
+    el.classList.remove('active');
+  });
+  // Show target
+  const target = document.getElementById('page-' + page);
+  if (target) target.classList.add('active');
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(page)) {
+      item.classList.add('active');
+    }
+  });
+  // Scroll main to top (except chat/assessor)
+  if (!['chat','assessor'].includes(page)) {
+    document.querySelector('.main').scrollTop = 0;
+  }
+}
+
+// ============================================================
+// ACTIVITY CHECKBOXES
+// ============================================================
+function toggleActivity(el) {
+  const cb = el.querySelector('.activity-checkbox');
+  const isDone = el.classList.toggle('done');
+  if (isDone) {
+    cb.classList.add('checked');
+    cb.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+  } else {
+    cb.classList.remove('checked');
+    cb.innerHTML = '';
+  }
+}
+
+// ============================================================
+// KANBAN DRAG & DROP
+// ============================================================
+let draggedCard = null;
+function dragStart(e) {
+  draggedCard = e.currentTarget;
+  draggedCard.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+}
+function dropCard(e, col) {
+  e.preventDefault();
+  if (!draggedCard) return;
+  draggedCard.classList.remove('dragging');
+  const container = document.getElementById('cards-' + col);
+  if (container) {
+    container.appendChild(draggedCard);
+    updateKanbanCounts();
+  }
+  draggedCard = null;
+}
+document.addEventListener('dragend', () => {
+  if (draggedCard) draggedCard.classList.remove('dragging');
+  draggedCard = null;
+});
+function updateKanbanCounts() {
+  ['urgente','andamento','aguardando','concluido'].forEach(col => {
+    const count = document.getElementById('cards-' + col)?.children.length || 0;
+    const el = document.getElementById('count-' + col);
+    if (el) el.textContent = count;
+  });
+}
+
+// ============================================================
+// TOGGLE KANBAN/LISTA
+// ============================================================
+function toggleView(view) {
+  const kanban = document.getElementById('kanban-view');
+  const lista = document.getElementById('lista-view');
+  const btnK = document.getElementById('btn-kanban');
+  const btnL = document.getElementById('btn-lista');
+  if (view === 'kanban') {
+    kanban.style.display = 'block';
+    lista.classList.remove('active');
+    btnK.classList.add('active');
+    btnL.classList.remove('active');
+  } else {
+    kanban.style.display = 'none';
+    lista.classList.add('active');
+    btnL.classList.add('active');
+    btnK.classList.remove('active');
+  }
+}
+
+// ============================================================
+// CALENDAR
+// ============================================================
+let calYear = 2026, calMonth = 2; // 0-based, March = 2
+
+const calEvents = {
+  '2026-3-17': [{text:'Audiência João Silva', cls:'red'}],
+  '2026-3-18': [{text:'Prazo Petição Vieira', cls:'amber'}],
+  '2026-3-19': [{text:'Reunião Vieira', cls:'green'}],
+  '2026-3-20': [{text:'Prazo Contestação', cls:'amber'}],
+  '2026-3-21': [{text:'Audiência Trabalhista', cls:'violet'}],
+  '2026-3-24': [{text:'Reunião interna STJ', cls:'blue'}],
+  '2026-3-25': [{text:'Prazo Recurso STJ', cls:'amber'}],
+  '2026-3-16': [{text:'Briefing equipe', cls:'blue'},{text:'Audiência instrução', cls:'red'}],
+};
+
+const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function renderCalendar() {
+  const label = document.getElementById('cal-month-label');
+  const container = document.getElementById('cal-days');
+  if (!label || !container) return;
+  
+  label.textContent = monthNames[calMonth] + ' ' + calYear;
+  
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const prevDays = new Date(calYear, calMonth, 0).getDate();
+  
+  let html = '';
+  const today = new Date();
+  const isCurrentMonth = today.getFullYear() === calYear && today.getMonth() === calMonth;
+  
+  // Previous month days
+  for (let i = firstDay - 1; i >= 0; i--) {
+    html += '<div class="cal-day other-month"><div class="cal-day-num">' + (prevDays - i) + '</div></div>';
+  }
+  
+  // Current month days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const isToday = isCurrentMonth && d === today.getDate();
+    const key = calYear + '-' + (calMonth + 1) + '-' + d;
+    const events = calEvents[key] || [];
+    let evHtml = events.map(ev => '<div class="cal-event ' + ev.cls + '">' + ev.text + '</div>').join('');
+    html += '<div class="cal-day' + (isToday ? ' today' : '') + '" onclick="selectDay(' + d + ')">';
+    html += '<div class="cal-day-num">' + d + '</div>';
+    html += evHtml;
+    html += '</div>';
+  }
+  
+  // Fill remaining
+  const total = firstDay + daysInMonth;
+  const remaining = total % 7 === 0 ? 0 : 7 - (total % 7);
+  for (let i = 1; i <= remaining; i++) {
+    html += '<div class="cal-day other-month"><div class="cal-day-num">' + i + '</div></div>';
+  }
+  
+  container.innerHTML = html;
+}
+
+function changeMonth(dir) {
+  calMonth += dir;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0) { calMonth = 11; calYear--; }
+  renderCalendar();
+}
+
+function selectDay(d) {
+  showToast('Dia ' + d + '/' + (calMonth+1) + '/' + calYear + ' selecionado');
+}
+
+// ============================================================
+// CHAT
+// ============================================================
+const aiResponses = [
+  'Entendido! Com base nas informações fornecidas, posso elaborar a peça processual. Para uma petição mais precisa, preciso dos seguintes dados adicionais: nome completo do réu, CNPJ/CPF e endereço para citação.',
+  'De acordo com a jurisprudência do STJ (REsp 1.234.567/GO), em casos similares, o entendimento consolidado é favorável ao pedido de dano moral quando comprovado o nexo causal entre a conduta e o abalo sofrido.',
+  'Analisando o prazo: conforme o CPC, art. 335, o prazo para contestação é de 15 dias úteis contados da citação. Considerando a data informada, o prazo final seria dia 08/04/2026.',
+  'Localizei 3 precedentes relevantes no TJGO para esta matéria. O mais recente (Apelação 5000123-45.2025.8.09.0051) confirma o direito à indenização em valores entre R$ 8.000 e R$ 20.000 em casos análogos.',
+  'Rascunho gerado! O documento contém 12 parágrafos e está estruturado com todos os requisitos do art. 319 do CPC. Acesse o Assessor Jurídico para revisar e confirmar os campos em azul.',
+];
+
+let aiResponseIndex = 0;
+let isTyping = false;
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text || isTyping) return;
+  
+  addMessage('user', text);
+  input.value = '';
+  input.style.height = '';
+  
+  isTyping = true;
+  setTimeout(() => {
+    const resp = aiResponses[aiResponseIndex % aiResponses.length];
+    aiResponseIndex++;
+    addMessage('ai', resp);
+    isTyping = false;
+  }, 800 + Math.random() * 700);
+}
+
+function addMessage(type, text) {
+  const container = document.getElementById('chat-messages');
+  const now = new Date();
+  const time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  const initials = type === 'ai' ? 'AI' : 'G';
+  const timeAlign = type === 'user' ? 'text-align:right;padding-right:4px' : 'padding-left:4px';
+  
+  const div = document.createElement('div');
+  div.className = 'msg ' + type;
+  div.innerHTML = '<div class="msg-avatar">' + initials + '</div>' +
+    '<div><div class="msg-bubble">' + text.replace(/\n/g, '<br>') + '</div>' +
+    '<div style="font-size:11px;color:var(--text-4);margin-top:4px;' + timeAlign + '">' + time + '</div></div>';
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+function handleChatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+}
+
+function insertSuggestion(btn) {
+  document.getElementById('chat-input').value = btn.textContent;
+  document.getElementById('chat-input').focus();
+}
+
+function addFileChip(input) {
+  const chips = document.getElementById('chat-chips');
+  Array.from(input.files).forEach(file => {
+    const chip = document.createElement('div');
+    chip.className = 'preview-chip';
+    chip.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+      file.name.substring(0,20) + (file.name.length > 20 ? '...' : '') +
+      '<button class="preview-chip-remove" onclick="this.parentElement.remove()">×</button>';
+    chips.appendChild(chip);
+  });
+}
+
+function autoResize(el) {
+  el.style.height = '';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ============================================================
+// ASSESSOR JURIDICO
+// ============================================================
+const assessorResponses = [
+  'Compreendido! Vou adaptar a peça com as informações fornecidas. Os campos em azul no editor precisam de confirmação direta com o cliente.',
+  'Peça atualizada no editor. Verifique especialmente a qualificação das partes e os dados do processo antes de protocolar.',
+  'Análise jurídica: identifico fundamento legal adicional relevante — Súmula 227 do STJ sobre responsabilidade de pessoa jurídica por dano moral. Incluí no documento.',
+];
+let assessorRespIndex = 0;
+
+function sendAssessorMessage() {
+  const input = document.getElementById('assessor-input');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  const chat = document.getElementById('assessor-chat');
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg user';
+  userDiv.style.maxWidth = '100%';
+  userDiv.style.flexDirection = 'row-reverse';
+  userDiv.innerHTML = '<div class="msg-avatar" style="background:var(--accent);color:white;width:28px;height:28px;font-size:10px;flex-shrink:0">G</div>' +
+    '<div class="msg-bubble" style="background:var(--accent);color:white;border-radius:12px 4px 12px 12px;font-size:12.5px;padding:10px 12px">' + text + '</div>';
+  chat.appendChild(userDiv);
+  chat.scrollTop = chat.scrollHeight;
+  
+  input.value = '';
+  input.style.height = '';
+  
+  setTimeout(() => {
+    const resp = assessorResponses[assessorRespIndex % assessorResponses.length];
+    assessorRespIndex++;
+    const aiDiv = document.createElement('div');
+    aiDiv.className = 'msg ai';
+    aiDiv.style.maxWidth = '100%';
+    aiDiv.innerHTML = '<div class="msg-avatar" style="background:#0a0a0a;color:white;width:28px;height:28px;font-size:10px;flex-shrink:0;margin-top:2px">AI</div>' +
+      '<div class="msg-bubble" style="background:#0a0a0a;color:rgba(255,255,255,.85);border-radius:4px 12px 12px 12px;font-size:12.5px;padding:10px 12px">' + resp + '</div>';
+    chat.appendChild(aiDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }, 600);
+}
+
+function handleAssessorKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendAssessorMessage();
+  }
+}
+
+function loadPeca(type) {
+  const msgs = {
+    peticao: 'Petição Inicial de Anderson Vieira carregada no editor.',
+    contestacao: 'Contestação de Maria Santos carregada no editor.',
+    recurso: 'Recurso Ordinário STJ 00142 carregado no editor.',
+    memorando: 'Memorando interno carregado no editor.',
+  };
+  showToast(msgs[type] || 'Peça carregada');
+}
+
+function switchEditorTab(tab) {
+  ['editor','revisao','historico'].forEach(t => {
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  });
+  if (tab === 'revisao') showToast('Revisão IA: 3 sugestões encontradas');
+  if (tab === 'historico') showToast('Histórico: 5 versões disponíveis');
+}
+
+function toggleToolbar(btnId, cmd) {
+  const btn = document.getElementById(btnId);
+  btn.classList.toggle('active');
+  document.execCommand(cmd, false, null);
+}
+
+function execCmd(cmd) {
+  document.execCommand(cmd, false, null);
+}
+
+function changeFontSize(size) {
+  document.execCommand('fontSize', false, '3');
+}
+
+function confirmField(el) {
+  const current = el.textContent;
+  const val = prompt('Confirme o valor para este campo:', current.replace('[','').replace(']',''));
+  if (val) {
+    el.textContent = val;
+    el.classList.remove('doc-confirm');
+    el.style.color = 'var(--text)';
+    el.style.borderBottom = 'none';
+    el.onclick = null;
+    updateFieldCount();
+    showToast('Campo confirmado: ' + val);
+  }
+}
+
+function updateFieldCount() {
+  const count = document.querySelectorAll('.doc-confirm').length;
+  const el = document.getElementById('field-count');
+  if (el) el.textContent = count + ' campo' + (count !== 1 ? 's' : '');
+}
+
+function downloadDoc() {
+  const content = document.getElementById('doc-editor')?.innerText || '';
+  const blob = new Blob([content], {type: 'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'peticao_inicial_anderson_vieira.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('Download iniciado: peticao_inicial_anderson_vieira.txt');
+}
+
+// ============================================================
+// FILES
+// ============================================================
+function dragOverDropzone(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.add('drag-over');
+}
+function dragLeaveDropzone() {
+  document.getElementById('dropzone').classList.remove('drag-over');
+}
+function handleDropFiles(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag-over');
+  if (e.dataTransfer.files.length) simulateUpload(e.dataTransfer.files[0]);
+}
+function handleFileUpload(input) {
+  if (input.files.length) simulateUpload(input.files[0]);
+}
+function simulateUpload(file) {
+  const wrap = document.getElementById('upload-progress-wrap');
+  const bar = document.getElementById('progress-bar');
+  const pct = document.getElementById('upload-pct');
+  const fn = document.getElementById('upload-filename');
+  
+  wrap.style.display = 'block';
+  fn.textContent = file.name;
+  bar.style.width = '0%';
+  pct.textContent = '0%';
+  
+  let progress = 0;
+  const interval = setInterval(() => {
+    progress += Math.random() * 18 + 5;
+    if (progress >= 100) {
+      progress = 100;
+      clearInterval(interval);
+      setTimeout(() => {
+        wrap.style.display = 'none';
+        addFileToList(file);
+        showToast('Arquivo enviado: ' + file.name);
+      }, 500);
+    }
+    bar.style.width = Math.min(progress, 100) + '%';
+    pct.textContent = Math.round(Math.min(progress, 100)) + '%';
+  }, 100);
+}
+function addFileToList(file) {
+  const list = document.getElementById('file-list');
+  const ext = file.name.split('.').pop().toUpperCase();
+  const size = file.size < 1024 ? file.size + ' B' : file.size < 1048576 ? Math.round(file.size/1024) + ' KB' : Math.round(file.size/1048576*10)/10 + ' MB';
+  const row = document.createElement('div');
+  row.className = 'file-row';
+  row.style.borderTop = '1px solid var(--border)';
+  row.innerHTML = '<div class="file-icon" style="background:#f4f4f5">📄</div>' +
+    '<div><div class="file-name">' + file.name + '</div><div class="file-sub">Adicionado agora</div></div>' +
+    '<span style="font-size:12.5px;color:var(--text-3)">' + ext + '</span>' +
+    '<span style="font-size:12.5px;color:var(--text-3)">' + size + '</span>' +
+    '<span class="status-badge pending">Novo</span>' +
+    '<div style="display:flex;gap:4px"><button class="btn-icon btn-sm" onclick="showToast('Download iniciado')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button></div>';
+  list.prepend(row);
+}
+function toggleFolder(el) {
+  const arrow = el.querySelector('.fold-arrow');
+  const id = el.getAttribute('onclick') ? '' : '';
+  // Find next sibling folder-children
+  let next = el.nextElementSibling;
+  if (next && next.classList.contains('folder-children')) {
+    const isOpen = next.classList.toggle('open');
+    if (arrow) arrow.style.transform = isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+  }
+}
+function selectFolder(el) {
+  document.querySelectorAll('.folder-item').forEach(f => f.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectAllFiles() {
+  showToast('Todos os arquivos selecionados');
+}
+
+// ============================================================
+// MODALS
+// ============================================================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) {
+    e.target.classList.remove('open');
+  }
+});
+
+function saveActivity() {
+  closeModal('modal-nova-atividade');
+  showToast('Atividade criada com sucesso');
+}
+function saveEvent() {
+  closeModal('modal-agendamento');
+  showToast('Evento adicionado ao calendário');
+  renderCalendar();
+}
+function saveProc() {
+  closeModal('modal-nova-proc');
+  showToast('Esteira de procuração iniciada');
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimeout;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ' + msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  renderCalendar();
+  updateFieldCount();
+});
+</script>
+</body>
+</html>
